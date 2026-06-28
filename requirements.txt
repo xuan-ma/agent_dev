@@ -1,3 +1,8 @@
+# pip镜像源 -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package
 python-dotenv==0.20.0
 # requests==2.24.0
-openai
+openai==2.16.0
+# 计算token的消耗量
+transformers==5.0.0  # HuggingFace库，用于加载tokenzier
+tiktoken==0.12.0  # OpenAI 官方tokenizer工具
+httpx==0.28.1  # http客户端，支持异步
