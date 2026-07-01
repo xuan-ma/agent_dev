@@ -4,8 +4,8 @@ import requests
 import json
 from openai import types
 
-from utils import api_key
-from config import model_info
+# from utils import api_key
+from config import model_platform_info
 
 def token_consume(response: types.chat.chat_completion.ChatCompletion):
     # 查看 Token 消耗，中文约 1.5-1.8 字 ≈ 1 token
@@ -44,9 +44,9 @@ def get_account_balance():
     # requests方式查询账户余额信息
     response = requests.get(
         # "https://openrouter.ai/api/v1/auth/key",
-        model_info["balance_url"],
+        model_platform_info["balance_url"],
         # headers={"Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}"}
-        headers={"Authorization": f"Bearer {api_key}"}
+        headers={"Authorization": f"Bearer {model_platform_info['api_key']}"}
     )
     print(json.dumps(response.json(), indent=2, ensure_ascii=False))
 
