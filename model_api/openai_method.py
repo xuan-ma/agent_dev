@@ -10,7 +10,7 @@ from openai import (
     APIError              # 通用 API 错误
 )
 
-from utils import print_conversation_maessages
+from model_api.utils import print_conversation_maessages
 from model_api.config import model_platform_info
 from model_api.fee_info import token_consume
 
@@ -35,6 +35,7 @@ def call_model(
         history_conversations: List[Dict]=[],
         max_tokens: int|None=None,
         stream: bool=False,
+        temperature: float=0.7,
         tools: List=[],
         timeout: float | None=None
     ) -> types.chat.chat_completion.ChatCompletion | Stream:
@@ -61,7 +62,7 @@ def call_model(
         # temperature = 0：输出最确定，每次运行结果几乎相同，适合需要稳定输出的场景
         # temperature = 0.7（默认值）：平衡了创造性和稳定性，适合大多数场景
         # temperature >= 1.5：输出高度随机和创造性，适合创意写作、头脑风暴
-        temperature=0.7,
+        temperature=temperature,
         max_tokens=max_tokens,  # 控制模型输出长度
         # max_completion_tokens=  这是控制什么输出
         stream=stream,  # 开启流式输出
@@ -79,6 +80,7 @@ def safe_call_model(
         history_conversations: List[Dict]=[],
         max_tokens: int|None=None,
         stream: bool=False,
+        temperature: float=0.7,
         tools: List=[],
         timeout: float | None=30.,
         max_retries: int=3
@@ -92,6 +94,7 @@ def safe_call_model(
                 history_conversations=history_conversations,
                 max_tokens=max_tokens,
                 stream=stream,
+                temperature=temperature,
                 tools=tools,
                 timeout=timeout,
             )
@@ -162,6 +165,7 @@ def conversation(
         history_conversations: List[Dict]=[],
         max_tokens: int|None=None,
         stream: bool=False,
+        temperature: float=0.7,
         tools: List=[],
         timeout: float | None=30.,
         max_retries: int=3
@@ -172,6 +176,7 @@ def conversation(
         history_conversations=history_conversations,
         max_tokens=max_tokens,
         stream=stream,
+        temperature=temperature,
         tools=tools,
         timeout=timeout,
     )
