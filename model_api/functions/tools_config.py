@@ -1,10 +1,8 @@
 # 定义工具 schema
 '''
-&emsp;&emsp;这个 schema 使用 JSON Schema 格式，包含：
-
-- **name**：函数名称（必须与实际函数名一致）
-
-- **description**：函数的作用描述（AI 根据这个描述判断是否调用）
+使用 JSON Schema 格式，包含：
+- name：函数名称（必须与实际函数名一致）
+- description：函数的作用描述（AI 根据这个描述判断是否调用）
 
 - **parameters**：参数定义（类型、描述、是否必填）
 
