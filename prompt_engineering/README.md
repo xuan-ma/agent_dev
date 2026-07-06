@@ -4,3 +4,7 @@
 - 限制回复范围（如"只回答 Python 相关问题"）
 - 设定语言和风格（如"用口语化的方式回复"、"用英文回复"）
 在实际应用中，<font color=red>合理使用 `system prompt` 可以显著提升 AI 的回复质量和可控性</font>。
+
+# CoT: Chain of Thougt 思维连模式
+
+# Few Shot: 给大模型提供少量示例
