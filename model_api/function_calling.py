@@ -29,7 +29,7 @@ print(f"用户: {user_query}\n")
 #     tool_choice="auto"  # auto: AI 自动决定是否调用；也可以设为 "none" 或强制调用某个工具
 # )
 response = conversation(
-    history_conversations=messages,
+    messages=messages,
     tools=tools
 )
 
@@ -64,7 +64,7 @@ if response.choices[0].message.tool_calls:
         #     messages=messages
         # )
         final_response = conversation(
-            history_conversations=messages
+            messages=messages
         )
         
         final_answer = final_response.choices[0].message.content

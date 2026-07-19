@@ -25,14 +25,14 @@ def convert_to_user_message(user_prompt: str) -> Dict:
     return {"role": "user", "content": user_prompt}
 
 
-def convert_to__system_message(system_prompt: str) -> Dict:
+def convert_to_system_message(system_prompt: str) -> Dict:
     return {"role": "system", "content": system_prompt}
 
 
 def call_model(
         user_prompt: str="",
         system_prompt: str="",
-        history_conversations: List[Dict]=[],
+        messages: List[Dict]=[],
         max_tokens: int|None=None,
         stream: bool=False,
         temperature: float=0.7,
@@ -49,17 +49,17 @@ def call_model(
     #   - function: 调用函数, 需指定function name
     '''
     if system_prompt:
-        history_conversations.append(
+        messages.append(
             {"role": "system", "content": system_prompt}
         )
     if user_prompt:
-        history_conversations.append(
+        messages.append(
             {"role": "user", "content": user_prompt}
         )
     
     return client.chat.completions.create(
         model=model_platform_info["model_name"],  # "openai/gpt-5",  # deepseek-v4-flash
-        messages=history_conversations,
+        messages=messages,
         # temperature = 0：输出最确定，每次运行结果几乎相同，适合需要稳定输出的场景
         # temperature = 0.7（默认值）：平衡了创造性和稳定性，适合大多数场景
         # temperature >= 1.5：输出高度随机和创造性，适合创意写作、头脑风暴
@@ -78,7 +78,7 @@ def call_model(
 def safe_call_model(
         user_prompt: str="",
         system_prompt: str="",
-        history_conversations: List[Dict]=[],
+        messages: List[Dict]=[],
         max_tokens: int|None=None,
         stream: bool=False,
         temperature: float=0.7,
@@ -92,7 +92,7 @@ def safe_call_model(
             return call_model(
                 user_prompt,
                 system_prompt,
-                history_conversations=history_conversations,
+                messages=messages,
                 max_tokens=max_tokens,
                 stream=stream,
                 temperature=temperature,
@@ -160,10 +160,11 @@ def stream_output(response: Stream) -> str:
     print("\n\n✅ 流式输出完成")
     return full_content
 
+
 def conversation(
         user_prompt: str="",
         system_prompt: str="",
-        history_conversations: List[Dict]=[],
+        messages: List[Dict]=[],
         max_tokens: int|None=None,
         stream: bool=False,
         temperature: float=0.7,
@@ -174,7 +175,7 @@ def conversation(
     response = safe_call_model(
         user_prompt,
         system_prompt=system_prompt,
-        history_conversations=history_conversations,
+        messages=messages,
         max_tokens=max_tokens,
         stream=stream,
         temperature=temperature,
@@ -203,7 +204,7 @@ def multi_conversations():
 
     # 调用 API 获取第一轮对话回复
     response_1 = conversation(
-        history_conversations=conversation_history,
+        messages=messages,
         # max_tokens=20,
         stream=False,
         tools=[],
@@ -231,7 +232,7 @@ def multi_conversations():
 
     # 调用 API 获取第二轮对话回复
     response_2 = conversation(
-        history_conversations=conversation_history,
+        messages=messages,
         stream=False,
         tools=[],
         timeout=30.,
@@ -292,7 +293,7 @@ def loop_conversions(system_prompt="你是一位友好的 AI 助手。"):  # , m
         # 调用 API
         try:
             response = conversation(
-                history_conversations=conversation_history
+                messages=messages
             )
             assistant_message = response.choices[0].message.content
             # 添加 AI 回复到历史
@@ -320,7 +321,7 @@ if __name__ == "__main__":
     # response_message: str = conversation(
     #     user_prompt,
     #     system_prompt=system_prompt,
-    #     history_conversations=[],
+    #     messages=[],
     #     stream=use_stream_output,
     #     tools=[]
     # )
