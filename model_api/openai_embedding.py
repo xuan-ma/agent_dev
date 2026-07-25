@@ -1,3 +1,5 @@
+import os
+
 from openai import OpenAI
 
 from config import model_info

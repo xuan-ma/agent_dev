@@ -37,7 +37,8 @@ def call_model(
         stream: bool=False,
         temperature: float=0.7,
         tools: List=[],
-        timeout: float | None=None
+        timeout: float | None=None,
+        **kw_args
     ) -> types.chat.chat_completion.ChatCompletion | Stream:
     '''
     # role:
@@ -71,7 +72,8 @@ def call_model(
         # auto: AI 自动决定是否调用；
         # "none" 或强制调用某个工具
         tool_choice="auto",
-        timeout=timeout  # float | httpx.Timeout | None | NotGiven
+        timeout=timeout,  # float | httpx.Timeout | None | NotGiven,
+        **kw_args
     )
 
 
@@ -84,7 +86,8 @@ def safe_call_model(
         temperature: float=0.7,
         tools: List=[],
         timeout: float | None=30.,
-        max_retries: int=3
+        max_retries: int=3,
+        **kw_args
     ) -> types.chat.chat_completion.ChatCompletion | Stream: 
     # 循环尝试 API 调用，最多重试 max_retries 次
     for attempt in range(max_retries):
@@ -98,6 +101,7 @@ def safe_call_model(
                 temperature=temperature,
                 tools=tools,
                 timeout=timeout,
+                **kw_args
             )
         except AuthenticationError as e:
             # 认证错误，无需重试
@@ -170,7 +174,8 @@ def conversation(
         temperature: float=0.7,
         tools: List=[],
         timeout: float | None=30.,
-        max_retries: int=3
+        max_retries: int=3,
+        **kw_args
     ) -> types.chat.chat_completion.ChatCompletion | Stream:
     response = safe_call_model(
         user_prompt,
@@ -181,8 +186,11 @@ def conversation(
         temperature=temperature,
         tools=tools,
         timeout=timeout,
+        **kw_args
     )
-    # print("response", type(response), response)
+    if not isinstance(response, types.chat.chat_completion.ChatCompletion):
+        print("response", type(response))
+        raise Exception(response)
     if not stream:
         response_message = normal_output(response)
     else:

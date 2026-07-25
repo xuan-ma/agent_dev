@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 # from config import model_type
 
-model_platform = "OpenRouter"
+model_platform = "DeepSeek"
 
 ## 加载环境变量
 env_path = Path(__file__).parent / ".env"  # 当前文件同级目录
@@ -33,8 +33,9 @@ PLATFORMS_CONFIG = {
         "balance_url": "https://openrouter.ai/api/v1/auth/key",
         # 智谱: z-ai/glm-5.2
         # deepseek: deepseek/deepseek-v4-pro
-        # OpenAI: openai/gpt-4o, 
-        "model_name": "openai/gpt-5"  
+        # OpenAI: openai/gpt-4o
+        #         openai/gpt-5 多模态模型
+        "model_name": "google/gemini-3-pro-image-preview"  # 文生图
     },
     "DashScope": {  # 阿里百炼
         "base_url": {
@@ -56,6 +57,11 @@ PLATFORMS_CONFIG = {
         },
         "api_key": os.getenv("OPENAI_API_KEY"),
         "model_name": "gpt-5"
+    },
+    "Anthropic": {
+        "": "",
+        "api_key": os.getenv("ANTHROPIC_API_KEY"),
+        "model_name": ""
     }
 }
 

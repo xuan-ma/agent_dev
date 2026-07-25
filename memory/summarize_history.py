@@ -37,7 +37,7 @@ def summarize_history(client, messages_to_summarize, model="deepseek-chat"):
         }
     ]
     summary_response = conversation(
-        history_conversations=messages,
+        messages=messages,
         temperature=0.3
     )
     return summary_response.choices[0].message.content
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     #     messages=compressed
     # )
     response = conversation(
-        history_conversations=compressed
+        messages=compressed
     )
 
     answer = response.choices[0].message.content
