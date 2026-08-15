@@ -3,8 +3,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# from config import model_type
-
 model_platform = "DeepSeek"
 
 ## 加载环境变量
@@ -35,7 +33,9 @@ PLATFORMS_CONFIG = {
         # deepseek: deepseek/deepseek-v4-pro
         # OpenAI: openai/gpt-4o
         #         openai/gpt-5 多模态模型
-        "model_name": "google/gemini-3-pro-image-preview"  # 文生图
+        #         openai/gpt-5-nano
+        # google/gemini-3-pro-image-preview   # 文生图
+        "model_name": "openai/gpt-5-nano"
     },
     "DashScope": {  # 阿里百炼
         "base_url": {

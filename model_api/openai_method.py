@@ -1,6 +1,8 @@
 import time
 import traceback
 from typing import Union, Dict, List
+import os
+import sys
 
 from openai import OpenAI, Stream, types
 from openai import (
@@ -10,6 +12,8 @@ from openai import (
     APIError              # 通用 API 错误
 )
 
+print("work path:", os.getcwd())
+sys.path.append(".")
 from model_api.utils import print_conversation_maessages
 from model_api.config import model_platform_info
 from model_api.fee_info import token_consume
@@ -36,7 +40,7 @@ def call_model(
         max_tokens: int|None=None,
         stream: bool=False,
         temperature: float=0.7,
-        tools: List=[],
+        # tools: List=[],
         timeout: float | None=None,
         **kw_args
     ) -> types.chat.chat_completion.ChatCompletion | Stream:
@@ -68,10 +72,12 @@ def call_model(
         max_tokens=max_tokens,  # 控制模型输出长度
         # max_completion_tokens=  这是控制什么输出
         stream=stream,  # 开启流式输出
-        tools=tools,  # 传递工具定义
-        # auto: AI 自动决定是否调用；
-        # "none" 或强制调用某个工具
-        tool_choice="auto",
+        # tools=tools,  # 传递工具定义
+        # auto: AI 自动决定是否调用
+        # required: 必须调用至少一个工具，不能直接回答
+        # none: 不允许调用任何工具，只能生成文本
+        # {type: function, function: ...}：强制调用某个工具
+        # tool_choice="auto",  # auto/required/none/
         timeout=timeout,  # float | httpx.Timeout | None | NotGiven,
         **kw_args
     )
@@ -84,7 +90,7 @@ def safe_call_model(
         max_tokens: int|None=None,
         stream: bool=False,
         temperature: float=0.7,
-        tools: List=[],
+        # tools: List=[],
         timeout: float | None=30.,
         max_retries: int=3,
         **kw_args
@@ -99,7 +105,7 @@ def safe_call_model(
                 max_tokens=max_tokens,
                 stream=stream,
                 temperature=temperature,
-                tools=tools,
+                # tools=tools,
                 timeout=timeout,
                 **kw_args
             )
@@ -172,7 +178,7 @@ def conversation(
         max_tokens: int|None=None,
         stream: bool=False,
         temperature: float=0.7,
-        tools: List=[],
+        # tools: List=[],
         timeout: float | None=30.,
         max_retries: int=3,
         **kw_args
@@ -184,7 +190,7 @@ def conversation(
         max_tokens=max_tokens,
         stream=stream,
         temperature=temperature,
-        tools=tools,
+        # tools=tools,
         timeout=timeout,
         **kw_args
     )

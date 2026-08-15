@@ -1,4 +1,7 @@
 import json
+import os
+
+import requests
 
 def get_weather(city: str, unit: str = "celsius") -> str:
     """
@@ -36,6 +39,42 @@ def get_weather(city: str, unit: str = "celsius") -> str:
     else:
         # 若城市未在数据中定义，返回错误信息
         return json.dumps({"error": f"未找到 {city} 的天气数据"}, ensure_ascii=False)
+
+TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "你的_tavily_api_key")
+
+# ==========================================
+# 1. 本地真正的工具函数执行逻辑：调用 Tavily API
+# ==========================================
+def get_weather_v2(query: str) -> str:
+    """
+    使用 Tavily 搜索天气信息的底层真实函数
+    """
+    print(f"\n🌍 [Tool 执行中] 正在通过 Tavily 搜索: {query} ...")
+    
+    url = "https://api.tavily.com/search"
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "api_key": TAVILY_API_KEY,
+        "query": query,
+        "search_depth": "basic",     # 基础搜索速度更快
+        "include_answer": True,      # 让 Tavily 尝试直接提取简短回答
+        "max_results": 3             # 只要前 3 个最相关的网页结果
+    }
+    
+    response = requests.post(url, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        data = response.json()
+        # 提取有价值的信息返回给大模型（优先返回 Tavily 的总结内容）
+        result_text = data.get("answer", "")
+        if not result_text:
+            # 如果没有直接 answer，就把搜索到的 snippet 组装起来
+            snippets = [result["content"] for result in data.get("results", [])]
+            result_text = "\n".join(snippets)
+        return json.dumps({"status": "success", "search_result": result_text},ensure_ascii=False)
+    else:
+        return json.dumps({"status": "error", "message": f"Tavily API 请求失败: {response.text}"})
+
 
 if __name__ == "__main__":
     # 测试函数

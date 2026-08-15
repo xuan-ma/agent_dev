@@ -30,6 +30,8 @@
 
 # Few Shot: 给大模型提供少量示例
 
+## papers
+- Language Models are Fet-Shot Learners
 
 # CoT: Chain of Thougt 思维连模式
 """
@@ -42,4 +44,10 @@
 3. 计算新数据：...
 4. 得出结论：...
 """
+## papers
+- Chain-of-Thought Prompting Elicits Reasoning in Large Language Models
+
+## 局限性
+- 虽然CoT可以显著提升LLM的推理能力，但是在推理的中间阶段，如果某一步出现错误，错误会沿着推理连传播，导致最终答案错误，而且LLM 无法自我验证中间步骤的正确性；
+
 
